@@ -1,0 +1,51 @@
+{
+  "name": "autoqq",
+  "version": "0.1.0",
+  "description": "Pre-warms AI coding CLI rate-limit windows on a schedule, so your workday overlaps three rolling windows instead of two.",
+  "type": "module",
+  "bin": {
+    "autoqq": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "install.sh"
+  ],
+  "os": [
+    "linux"
+  ],
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Migiht/autoqq.git"
+  },
+  "homepage": "https://github.com/Migiht/autoqq#readme",
+  "bugs": {
+    "url": "https://github.com/Migiht/autoqq/issues"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^1.7.0",
+    "commander": "^13.1.0",
+    "conf": "^13.1.0",
+    "env-paths": "^3.0.0",
+    "execa": "^9.5.2",
+    "picocolors": "^1.1.1",
+    "pino": "^9.6.0",
+    "pino-roll": "^3.1.0",
+    "which": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/which": "^3.0.4",
+    "tsdown": "^0.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
