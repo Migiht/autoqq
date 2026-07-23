@@ -37,6 +37,10 @@
 
 ---
 
+<p align="center">
+  <video src="https://github.com/Migiht/autoqq/raw/main/autoqq-promo.mp4" width="720" controls></video>
+</p>
+
 `autoqq` sit on always-on Linux box. Ask few question once. Then quiet — sends one-token
 "keep-alive" grunt to Claude Code, Codex CLI, or opencode on a `systemd` timer, before you
 even open laptop. Clock already ticking when you arrive.
