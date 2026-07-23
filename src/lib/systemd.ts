@@ -1,5 +1,5 @@
 import { execa } from "execa";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import which from "which";
@@ -68,6 +68,15 @@ export async function restartToolTimer(toolId: string): Promise<void> {
 
 export async function disableToolTimer(toolId: string): Promise<void> {
   await execa("systemctl", ["--user", "disable", "--now", `autoqq-ping@${toolId}.timer`]);
+}
+
+/** Deletes the shared templated unit pair and reloads systemd. */
+export async function removeSystemdUnits(): Promise<void> {
+  const servicePath = join(unitDir, serviceUnitName);
+  const timerPath = join(unitDir, timerUnitName);
+  if (existsSync(servicePath)) rmSync(servicePath);
+  if (existsSync(timerPath)) rmSync(timerPath);
+  await execa("systemctl", ["--user", "daemon-reload"]);
 }
 
 /** Required so timers keep firing after the installing SSH session ends. */

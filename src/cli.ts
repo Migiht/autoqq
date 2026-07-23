@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 import { Command } from "commander";
+import { readFileSync } from "node:fs";
 
 if (process.platform !== "linux") {
   console.error("autoqq only supports Linux (it schedules pings via systemd user timers).");
   process.exit(1);
 }
+
+const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 
 const program = new Command();
 
@@ -13,7 +16,7 @@ program
   .description(
     "Pre-warms AI coding CLI rate-limit windows on a schedule, so your workday spans more rolling windows for free."
   )
-  .version("0.1.0");
+  .version(pkg.version);
 
 program
   .command("init")
@@ -29,6 +32,17 @@ program
   .action(async (tool?: string) => {
     const { runInstall } = await import("./commands/install.js");
     await runInstall(tool);
+  });
+
+program
+  .command("uninstall [tool]")
+  .description(
+    "Stop and remove a single tool's schedule, or (with no argument) fully remove autoqq"
+  )
+  .option("-y, --yes", "skip confirmation prompts")
+  .action(async (tool: string | undefined, options: { yes?: boolean }) => {
+    const { runUninstall } = await import("./commands/uninstall.js");
+    await runUninstall(tool, options);
   });
 
 program
