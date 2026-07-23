@@ -39,7 +39,7 @@
 
 <p align="center">
   <a href="https://github.com/Migiht/autoqq/raw/main/autoqq-promo.mp4">
-    <img src="autoqq-promo-thumb.jpg" alt="autoqq promo video (click to play)" width="720">
+    <img src="autoqq-promo.gif" alt="autoqq promo (click for the version with sound)" width="640">
   </a>
 </p>
 
