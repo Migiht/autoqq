@@ -2,8 +2,7 @@
   <img src="logo.jpg" alt="autoqq" width="720">
 </p>
 
-> [!TIP]
-> **PSA:** always say hi to your coding agent 👋 — it's polite, it's free, and it's
+> **PSA:** Always say hi to your coding agent 👋 — it's polite, it's free, and it's
 > literally the whole trick this tool automates for you, every few hours, forever.
 
 <p align="center">
