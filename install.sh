@@ -24,7 +24,7 @@ fi
 command -v npm >/dev/null 2>&1 || error "npm was not found alongside node. Install npm and re-run."
 
 info "Installing autoqq globally via npm..."
-npm install -g autoqq
+npm install -g @migiht/autoqq
 
 if ! command -v autoqq >/dev/null 2>&1; then
   error "autoqq installed but isn't on PATH. Check npm's global bin dir with: npm bin -g"

@@ -72,7 +72,7 @@ autoqq init
 Or via npm directly:
 
 ```sh
-npm install -g autoqq
+npm install -g @migiht/autoqq
 autoqq init
 ```
 

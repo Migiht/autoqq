@@ -1,10 +1,10 @@
 {
-  "name": "autoqq",
+  "name": "@migiht/autoqq",
   "version": "0.1.0",
   "description": "Pre-warms AI coding CLI rate-limit windows on a schedule, so your workday overlaps three rolling windows instead of two.",
   "type": "module",
   "bin": {
-    "autoqq": "./dist/cli.js"
+    "autoqq": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -27,7 +27,8 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsx src/cli.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run build"
   },
   "license": "MIT",
   "dependencies": {
