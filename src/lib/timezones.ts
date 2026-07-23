@@ -44,7 +44,14 @@ export function buildTimezoneOptions(): TimezoneOption[] {
 
   const fixedOffsets: TimezoneOption[] = [];
   for (let hours = -12; hours <= 14; hours++) {
-    if (hours === 0) continue; // "UTC" is already in the IANA list
+    // Despite what you'd expect, Intl.supportedValuesOf("timeZone") does not
+    // actually include "UTC" (or "Etc/UTC"/"Etc/GMT") in its output, even
+    // though all three are accepted by the Intl.DateTimeFormat constructor.
+    // Without this branch there would be no way to select plain UTC at all.
+    if (hours === 0) {
+      fixedOffsets.push({ value: "UTC", label: "UTC", hint: "fixed offset, no DST" });
+      continue;
+    }
     const sign = hours > 0 ? "+" : "-";
     const abs = Math.abs(hours);
     // Etc/GMT signs are POSIX-inverted relative to common UTC notation.

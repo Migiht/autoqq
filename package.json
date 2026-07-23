@@ -28,7 +28,8 @@
     "build": "tsdown",
     "dev": "tsx src/cli.ts",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run typecheck && npm run build"
+    "test": "tsx --test src/**/*.test.ts",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
   },
   "license": "MIT",
   "dependencies": {
