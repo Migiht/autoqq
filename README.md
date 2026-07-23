@@ -38,7 +38,9 @@
 ---
 
 <p align="center">
-  <video src="https://github.com/Migiht/autoqq/raw/main/autoqq-promo.mp4" width="720" controls></video>
+  <a href="https://github.com/Migiht/autoqq/raw/main/autoqq-promo.mp4">
+    <img src="autoqq-promo-thumb.jpg" alt="autoqq promo video (click to play)" width="720">
+  </a>
 </p>
 
 `autoqq` sit on always-on Linux box. Ask few question once. Then quiet — sends one-token
