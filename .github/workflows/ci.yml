@@ -29,9 +29,65 @@ jobs:
           path: dist/
           retention-days: 14
 
+  install-smoke-test:
+    name: Real npm install + ping smoke test (ubuntu-latest)
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - run: npm ci
+      - run: npm run build
+
+      # Same tarball `npm publish` would ship — packaging bugs (missing dist
+      # files, bad `files` allowlist, broken shebang) only show up once it's
+      # actually installed globally, not from running the repo checkout directly.
+      - name: Pack the real publishable tarball
+        run: npm pack --pack-destination /tmp
+
+      - name: Install it globally, exactly like a real user running `npm install -g`
+        run: npm install -g /tmp/migiht-autoqq-*.tgz
+
+      - name: Verify the globally-installed binary actually runs
+        run: |
+          command -v autoqq
+          autoqq --version
+          autoqq --help
+
+      # `autoqq ping` is a oneshot: it shells out to the real tool's CLI
+      # (`claude --bare -p <greeting>`). CI has no Anthropic login and
+      # shouldn't — real auth/network calls in CI would need secrets on
+      # every PR, cost money, and flake on rate limits. So stub the `claude`
+      # binary and its credentials file, and assert autoqq's own wiring
+      # (tool resolution, PATH, subprocess spawn, exit code, logging)
+      # actually works — the same boundary pm2/Ghost-CLI stub in their own
+      # process-manager tests rather than driving a real target app.
+      - name: Stub the claude CLI (no real auth/network calls in CI)
+        run: |
+          mkdir -p "$HOME/.local/bin" "$HOME/.claude"
+          cat > "$HOME/.local/bin/claude" <<'EOF'
+          #!/usr/bin/env bash
+          echo "fake claude called with: $*"
+          exit 0
+          EOF
+          chmod +x "$HOME/.local/bin/claude"
+          echo '{"claudeAiOauth":{"accessToken":"fake-ci-token"}}' > "$HOME/.claude/.credentials.json"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Run a real ping end-to-end against the stub
+        run: autoqq ping claude | tee /tmp/ping-output.txt
+
+      - name: Assert the ping actually reached the stubbed claude binary
+        run: grep -q "fake claude called with: --bare -p" /tmp/ping-output.txt
+
   publish:
     name: Publish to npm
-    needs: test
+    needs: [test, install-smoke-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

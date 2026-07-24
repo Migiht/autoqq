@@ -1,7 +1,7 @@
 import { execa } from "execa";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import which from "which";
 import type { AutoqqConfig } from "./config.js";
 import { computeDailyPingTimes } from "./schedule.js";
@@ -21,12 +21,24 @@ async function resolveAutoqqBinary(): Promise<string> {
 export async function writeSystemdUnits(config: AutoqqConfig): Promise<void> {
   mkdirSync(unitDir, { recursive: true });
   const bin = await resolveAutoqqBinary();
+  // autoqq's shebang is `#!/usr/bin/env node`, so systemd --user's own (minimal)
+  // session PATH must be able to find node. Version managers like nvm only put
+  // node's bin dir on PATH via shell rc files, which systemd never sources.
+  // Same fix pm2 uses for its generated systemd unit's %NODE_PATH%:
+  // https://github.com/unitech/pm2/blob/master/lib/API/Startup.js (search NODE_PATH)
+  // https://github.com/unitech/pm2/blob/master/lib/templates/init-scripts/systemd.tpl
+  const nodeDir = dirname(process.execPath);
+  const currentPath = process.env.PATH ?? "";
+  const unitPath = currentPath.split(":").includes(nodeDir)
+    ? currentPath
+    : `${currentPath}:${nodeDir}`;
 
   const service = `[Unit]
 Description=autoqq keep-alive ping for %i
 
 [Service]
 Type=oneshot
+Environment=PATH=${unitPath}
 ExecStart=${bin} ping %i
 StandardOutput=journal
 StandardError=journal
