@@ -83,7 +83,8 @@ jobs:
         run: autoqq ping claude | tee /tmp/ping-output.txt
 
       - name: Assert the ping actually reached the stubbed claude binary
-        run: grep -q "fake claude called with: --bare -p" /tmp/ping-output.txt
+        run: |
+          grep -q "fake claude called with: --bare -p" /tmp/ping-output.txt
 
   publish:
     name: Publish to npm
