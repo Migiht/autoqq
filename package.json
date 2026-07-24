@@ -1,6 +1,6 @@
 {
   "name": "@migiht/autoqq",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Pre-warms AI coding CLI rate-limit windows on a schedule, so your workday overlaps three rolling windows instead of two.",
   "type": "module",
   "bin": {
