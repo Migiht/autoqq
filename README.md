@@ -213,7 +213,7 @@ autoqq ping <tool>        internal — sends one keep-alive message (called by s
 
 | Tool | Binary | Ping command |
 |---|---|---|
-| Claude Code | `claude` | `claude --bare -p "<greeting>"` |
+| Claude Code | `claude` | `claude -p "<greeting>"` |
 | Codex CLI | `codex` | `codex exec --skip-git-repo-check "<greeting>"` |
 | opencode | `opencode` | `opencode run "<greeting>"` |
 

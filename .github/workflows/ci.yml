@@ -84,7 +84,7 @@ jobs:
 
       - name: Assert the ping actually reached the stubbed claude binary
         run: |
-          grep -q "fake claude called with: --bare -p" /tmp/ping-output.txt
+          grep -q "fake claude called with: -p" /tmp/ping-output.txt
 
   publish:
     name: Publish to npm
